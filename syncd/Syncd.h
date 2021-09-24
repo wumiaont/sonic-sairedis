@@ -489,5 +489,7 @@ namespace syncd
             std::shared_ptr<sairedis::ContextConfig> m_contextConfig;
 
             std::shared_ptr<BreakConfig> m_breakConfig;
+
+            std::set<sai_object_id_t> m_createdInInitView;
     };
 }
