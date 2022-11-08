@@ -190,14 +190,13 @@ void Recorder::requestLogRotate()
 
     /* double check since reopen could fail */
 
-    if (m_ofstream.is_open())
-    {
-        m_ofstream << getTimestamp() << "|" << "#|logrotate on: " << m_recordingFile << std::endl;
-    }
+    recordLine("#|logrotate on: " + m_recordingFile);
 }
 
 void Recorder::recordingFileReopen()
 {
+    MUTEX();
+
     SWSS_LOG_ENTER();
 
     m_ofstream.close();
@@ -225,12 +224,15 @@ void Recorder::startRecording()
 
     m_recordingFile = m_recordingOutputDirectory + "/" + m_recordingFileName;
 
-    m_ofstream.open(m_recordingFile, std::ofstream::out | std::ofstream::app);
-
-    if (!m_ofstream.is_open())
     {
-        SWSS_LOG_ERROR("failed to open recording file %s: %s", m_recordingFile.c_str(), strerror(errno));
-        return;
+        MUTEX();
+        m_ofstream.open(m_recordingFile, std::ofstream::out | std::ofstream::app);
+
+        if (!m_ofstream.is_open())
+        {
+            SWSS_LOG_ERROR("failed to open recording file %s: %s", m_recordingFile.c_str(), strerror(errno));
+            return;
+        }
     }
 
     recordLine("#|recording on: " + m_recordingFile);
@@ -240,6 +242,8 @@ void Recorder::startRecording()
 
 void Recorder::stopRecording()
 {
+    MUTEX();
+
     SWSS_LOG_ENTER();
 
     SWSS_LOG_NOTICE("stopped recording");
