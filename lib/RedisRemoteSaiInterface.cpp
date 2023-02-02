@@ -1975,6 +1975,7 @@ sai_status_t RedisRemoteSaiInterface::sai_redis_notify_syncd(
         case SAI_REDIS_NOTIFY_SYNCD_INIT_VIEW:
         case SAI_REDIS_NOTIFY_SYNCD_APPLY_VIEW:
         case SAI_REDIS_NOTIFY_SYNCD_INSPECT_ASIC:
+        case SAI_REDIS_NOTIFY_SYNCD_INVOKE_DUMP:
             break;
 
         default:
@@ -2013,6 +2014,12 @@ sai_status_t RedisRemoteSaiInterface::sai_redis_notify_syncd(
             case SAI_REDIS_NOTIFY_SYNCD_INSPECT_ASIC:
 
                 SWSS_LOG_NOTICE("inspect ASIC SUCCEEDED");
+
+                break;
+
+            case SAI_REDIS_NOTIFY_SYNCD_INVOKE_DUMP:
+
+                SWSS_LOG_NOTICE("invoked DUMP succeeded");
 
                 break;
 
