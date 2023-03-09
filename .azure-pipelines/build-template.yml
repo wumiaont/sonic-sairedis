@@ -62,6 +62,8 @@ jobs:
     clean: true
     submodules: true
   - script: |
+      set -ex
+      sudo apt-get update
       sudo apt-get install -qq -y \
         qtbase5-dev \
         libdbus-glib-1-2 \
@@ -101,6 +103,7 @@ jobs:
       artifact: ${{ parameters.swss_common_artifact_name }}
       runVersion: 'latestFromBranch'
       runBranch: 'refs/heads/$(BUILD_BRANCH)'
+      allowPartiallySucceededBuilds: true
       path: $(Build.ArtifactStagingDirectory)/download
     displayName: "Download sonic swss common deb packages"
   - script: |
