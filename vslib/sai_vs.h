@@ -61,6 +61,17 @@ PRIVATE extern const sai_vlan_api_t                    vs_vlan_api;
 PRIVATE extern const sai_wred_api_t                    vs_wred_api;
 PRIVATE extern const sai_my_mac_api_t                  vs_my_mac_api;
 PRIVATE extern const sai_ipsec_api_t                   vs_ipsec_api;
+PRIVATE extern const sai_ars_api_t                     vs_ars_api;
+PRIVATE extern const sai_ars_profile_api_t             vs_ars_profile_api;
+PRIVATE extern const sai_dash_acl_api_t                vs_dash_acl_api;
+PRIVATE extern const sai_dash_direction_lookup_api_t   vs_dash_direction_lookup_api;
+PRIVATE extern const sai_dash_eni_api_t                vs_dash_eni_api;
+PRIVATE extern const sai_dash_inbound_routing_api_t    vs_dash_inbound_routing_api;
+PRIVATE extern const sai_dash_outbound_ca_to_pa_api_t  vs_dash_outbound_ca_to_pa_api;
+PRIVATE extern const sai_dash_outbound_routing_api_t   vs_dash_outbound_routing_api;
+PRIVATE extern const sai_dash_vnet_api_t               vs_dash_vnet_api;
+PRIVATE extern const sai_dash_pa_validation_api_t      vs_dash_pa_validation_api;
+PRIVATE extern const sai_dash_vip_api_t                vs_dash_vip_api;
 
 PRIVATE extern std::shared_ptr<sairedis::SaiInterface>      vs_sai;
 

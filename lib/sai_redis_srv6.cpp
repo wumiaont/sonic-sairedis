@@ -5,6 +5,7 @@ REDIS_BULK_REMOVE(SRV6_SIDLIST, srv6_sidlist);
 REDIS_GENERIC_QUAD(SRV6_SIDLIST,srv6_sidlist);
 REDIS_BULK_QUAD_ENTRY(MY_SID_ENTRY,my_sid_entry);
 REDIS_GENERIC_QUAD_ENTRY(MY_SID_ENTRY,my_sid_entry);
+REDIS_GENERIC_STATS(SRV6_SIDLIST,srv6_sidlist);
 
 const sai_srv6_api_t redis_srv6_api = {
 
@@ -12,6 +13,8 @@ const sai_srv6_api_t redis_srv6_api = {
 
     redis_bulk_create_srv6_sidlist,
     redis_bulk_remove_srv6_sidlist,
+
+    REDIS_GENERIC_STATS_API(srv6_sidlist)
 
     REDIS_GENERIC_QUAD_API(my_sid_entry)
     REDIS_BULK_QUAD_API(my_sid_entry)

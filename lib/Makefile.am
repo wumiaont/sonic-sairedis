@@ -76,6 +76,17 @@ libsairedis_la_SOURCES = \
 						 sai_redis_virtual_router.cpp \
 						 sai_redis_vlan.cpp \
 						 sai_redis_wred.cpp \
+						 sai_redis_ars.cpp \
+						 sai_redis_ars_profile.cpp \
+						 sai_resis_dash_acl.cpp \
+						 sai_resis_dash_direction_lookup.cpp \
+						 sai_resis_dash_eni.cpp \
+						 sai_resis_dash_inbound_routing.cpp \
+						 sai_resis_dash_outbound_ca_to_pa.cpp \
+						 sai_resis_dash_outbound_routing.cpp \
+						 sai_resis_dash_vnet.cpp \
+						 sai_redis_dash_pa_validation.cpp \
+						 sai_redis_dash_vip.cpp \
 						 sai_redis_ipsec.cpp \
 						 sai_redis_my_mac.cpp
 
