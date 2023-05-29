@@ -59,7 +59,7 @@ Syncd::Syncd(
     m_vendorSai(vendorSai),
     m_veryFirstRun(false),
     m_enableSyncMode(false),
-    m_timerWatchdog(30 * 1000000 * WD_DELAY_FACTOR) // watch for executions over 30 seconds or 60 seconds if ASAN enabled
+    m_timerWatchdog(cmd->m_watchdogWarnTimeSpan * WD_DELAY_FACTOR)
 {
     SWSS_LOG_ENTER();
 
