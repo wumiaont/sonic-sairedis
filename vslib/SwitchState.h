@@ -86,6 +86,16 @@ namespace saivs
                     _In_ const sai_object_id_t port_id,
                     _Out_ std::string& if_name);
 
+            sai_status_t getPortStat(
+                    _In_ sai_object_id_t port_id, 
+                    _In_ const sai_stat_id_t counter_id, 
+                    _Out_ uint64_t &counters);
+
+           sai_status_t getNetStat(
+                   _In_ sai_stat_id_t counter_id, 
+                   _In_ std::string& if_name, 
+                   _Out_ uint64_t &counter);
+
         protected:
 
             void registerLinkCallback();

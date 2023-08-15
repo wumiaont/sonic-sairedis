@@ -199,6 +199,102 @@ void SwitchState::asyncOnLinkMsg(
     m_switchConfig->m_eventQueue->enqueue(std::make_shared<Event>(EVENT_TYPE_NET_LINK_MSG, payload));
 }
 
+sai_status_t SwitchState::getNetStat(
+        _In_ sai_stat_id_t counter_id, 
+        _In_ std::string& if_name, 
+        _Out_ uint64_t &counter)
+{
+    struct {
+        sai_stat_id_t id;
+        std::string name;
+    } counter_map [] = {
+        { SAI_PORT_STAT_IF_IN_OCTETS, "rx_bytes" },
+        { SAI_PORT_STAT_IF_IN_UCAST_PKTS, "rx_packets" },
+        { SAI_PORT_STAT_IF_IN_ERRORS, "rx_errors" },
+        { SAI_PORT_STAT_IF_IN_DISCARDS, "rx_dropped" },
+        { SAI_PORT_STAT_IF_OUT_OCTETS, "tx_bytes" },
+        { SAI_PORT_STAT_IF_OUT_UCAST_PKTS, "tx_packets" },
+        { SAI_PORT_STAT_IF_OUT_ERRORS, "tx_errors" },
+        { SAI_PORT_STAT_IF_OUT_DISCARDS, "tx_dropped" }
+    };
+    uint32_t counter_map_size = 8;
+
+    FILE *fp;
+    char stat[100];
+    char cmd[200];
+    uint32_t i;
+    sai_status_t rc = SAI_STATUS_SUCCESS;
+
+    for(i = 0; i < counter_map_size; i++)
+    {
+        if(counter_map[i].id == counter_id)
+        {
+            sprintf(cmd, "/bin/cat /sys/class/net/%s/statistics/%s", if_name.c_str(), counter_map[i].name.c_str()); 
+            fp = popen(cmd, "r");
+            if((fp != NULL) && (fgets(stat, sizeof(stat), fp) != NULL))
+            {
+                counter = atoi(stat);
+                SWSS_LOG_DEBUG("%s [ %s ]  = %s", if_name.c_str(), counter_map[i].name.c_str(), stat);
+            }
+            else
+            {
+                counter = -1;
+                SWSS_LOG_ERROR("get counter cmd %s failed fp=%x", cmd, fp);
+                rc = SAI_STATUS_FAILURE;
+            }
+            if(fp != NULL)
+            {
+                pclose(fp);
+            }
+            break;
+        }
+    }
+    return rc;
+}
+
+
+sai_status_t SwitchState::getPortStat(
+        _In_ sai_object_id_t port_id,
+        _In_ const sai_stat_id_t counter_id,
+        _Out_ uint64_t &counter)
+{
+    std::string if_name;
+
+    /* zero out counters */
+    counter = 0;
+
+    if(getTapNameFromPortId(port_id, if_name) == false)
+    {
+        /* Port not ready */
+        SWSS_LOG_DEBUG("Port not ready %s", sai_serialize_object_id(port_id).c_str());
+        return SAI_STATUS_SUCCESS;
+    }
+
+    switch(counter_id)
+    {
+        case SAI_PORT_STAT_IF_IN_OCTETS:
+        case SAI_PORT_STAT_IF_IN_UCAST_PKTS:
+        case SAI_PORT_STAT_IF_IN_ERRORS:
+        case SAI_PORT_STAT_IF_IN_DISCARDS:
+        case SAI_PORT_STAT_IF_OUT_OCTETS:
+        case SAI_PORT_STAT_IF_OUT_UCAST_PKTS:
+        case SAI_PORT_STAT_IF_OUT_ERRORS:
+        case SAI_PORT_STAT_IF_OUT_DISCARDS:
+        {
+            if(getNetStat(counter_id, if_name, counter) != SAI_STATUS_SUCCESS)
+            {
+                SWSS_LOG_ERROR("Port stat get failed %s", if_name.c_str()); 
+            }
+        }
+        break;
+        default:
+            /* Already set to zero */
+        break;
+    }
+
+    return SAI_STATUS_SUCCESS;
+}
+
 sai_status_t SwitchState::getStatsExt(
         _In_ sai_object_type_t object_type,
         _In_ sai_object_id_t object_id,
@@ -249,6 +345,7 @@ sai_status_t SwitchState::getStatsExt(
     for (uint32_t i = 0; i < number_of_counters; ++i)
     {
         int32_t id = counter_ids[i];
+        uint64_t counter;
 
         if (perform_set)
         {
@@ -266,6 +363,13 @@ sai_status_t SwitchState::getStatsExt(
             else
             {
                 counters[i] = it->second;
+            }
+
+            /* In non unit test mode fetch port counters from host interface */
+            if (!enabled && (object_type == SAI_OBJECT_TYPE_PORT))
+            {
+                getPortStat(object_id, id, counter);
+                localcounters[ id ] = counter;
             }
 
             if (mode == SAI_STATS_MODE_READ_AND_CLEAR)
