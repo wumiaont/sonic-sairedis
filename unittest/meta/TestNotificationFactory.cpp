@@ -46,6 +46,15 @@ TEST(NotificationFactory, deserialize_port_state_change)
     EXPECT_EQ(ntf->getNotificationType(), SAI_SWITCH_NOTIFICATION_TYPE_PORT_STATE_CHANGE);
 }
 
+TEST(NotificationFactory, deserialize_port_host_tx_ready_status)
+{
+    auto ntf = NotificationFactory::deserialize(
+            SAI_SWITCH_NOTIFICATION_NAME_PORT_HOST_TX_READY,
+            "[{\"host_tx_ready_status\":\"SAI_PORT_HOST_TX_READY_STATUS_READY\",\"port_id\":\"oid:0x100000000001a\",\"switch_id\":\"oid:0x2100000000\"}]");
+
+    EXPECT_EQ(ntf->getNotificationType(), SAI_SWITCH_NOTIFICATION_TYPE_PORT_HOST_TX_READY);
+}
+
 TEST(NotificationFactory, deserialize_queue_pfc_deadlock)
 {
     auto str = "[{\"event\":\"SAI_QUEUE_PFC_DEADLOCK_EVENT_TYPE_DETECTED\",\"queue_id\":\"oid:0x1500000000020a\"}]";

@@ -6434,6 +6434,49 @@ void Meta::meta_sai_on_nat_event(
     }
 }
 
+void Meta::meta_sai_on_port_host_tx_ready_change(
+                    _In_ sai_object_id_t port_id,
+                    _In_ sai_object_id_t switch_id,
+                    _In_ sai_port_host_tx_ready_status_t host_tx_ready_status)
+{
+    SWSS_LOG_ENTER();
+
+    if (!sai_metadata_get_enum_value_name(
+            &sai_metadata_enum_sai_port_host_tx_ready_status_t,
+            host_tx_ready_status))
+    {
+        SWSS_LOG_WARN("port host_tx_ready value (%d) not found in sai_port_host_tx_ready_status_t. Dropping the notification",
+                host_tx_ready_status);
+
+        return;
+    }
+
+    auto ot = objectTypeQuery(port_id);
+
+    if (ot != SAI_OBJECT_TYPE_PORT)
+    {
+        SWSS_LOG_ERROR("port_id %s has unexpected type: %s, expected PORT",
+                    sai_serialize_object_id(port_id).c_str(),
+                    sai_serialize_object_type(ot).c_str());
+        return;
+    }
+
+    if (!m_oids.objectReferenceExists(port_id))
+    {
+        SWSS_LOG_NOTICE("port_id new object spotted %s not present in local DB (snoop!)",
+                sai_serialize_object_id(port_id).c_str());
+
+        sai_object_meta_key_t host_tx_ready_key = { .objecttype = ot, .objectkey = { .key = { .object_id = port_id } } };
+        m_oids.objectReferenceInsert(port_id);
+
+        if (!m_saiObjectCollection.objectExists(host_tx_ready_key))
+        {
+            m_saiObjectCollection.createObject(host_tx_ready_key);
+        }
+    }
+}
+
+
 void Meta::meta_sai_on_switch_state_change(
         _In_ sai_object_id_t switch_id,
         _In_ sai_switch_oper_status_t switch_oper_status)

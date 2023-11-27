@@ -240,6 +240,11 @@ namespace saiplayer
                     _In_ uint32_t count,
                     _In_ const sai_bfd_session_state_notification_t *data);
 
+            void onPortHostTxReady(
+                    _In_ sai_object_id_t switch_id,
+                    _In_ sai_object_id_t port_id,
+                    _In_ sai_port_host_tx_ready_status_t host_tx_ready_status);
+
         private:
 
             std::shared_ptr<sairedis::SaiInterface> m_sai;

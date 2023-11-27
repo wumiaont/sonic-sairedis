@@ -90,6 +90,7 @@ SaiPlayer::SaiPlayer(
     m_sn.onSwitchShutdownRequest = std::bind(&SaiPlayer::onSwitchShutdownRequest, this, _1);
     m_sn.onSwitchStateChange = std::bind(&SaiPlayer::onSwitchStateChange, this, _1, _2);
     m_sn.onBfdSessionStateChange = std::bind(&SaiPlayer::onBfdSessionStateChange, this, _1, _2);
+    m_sn.onPortHostTxReady = std::bind(&SaiPlayer::onPortHostTxReady, this, _1, _2, _3);
 
     m_switchNotifications= m_sn.getSwitchNotifications();
 }
@@ -169,6 +170,16 @@ void SaiPlayer::onPortStateChange(
 void SaiPlayer::onBfdSessionStateChange(
         _In_ uint32_t count,
         _In_ const sai_bfd_session_state_notification_t *data)
+{
+    SWSS_LOG_ENTER();
+
+    // empty
+}
+
+void SaiPlayer::onPortHostTxReady(
+        _In_ sai_object_id_t switch_id,
+        _In_ sai_object_id_t port_id,
+        _In_ sai_port_host_tx_ready_status_t host_tx_ready_status)
 {
     SWSS_LOG_ENTER();
 
