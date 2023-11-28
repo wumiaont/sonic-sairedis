@@ -4394,16 +4394,6 @@ void Syncd::performWarmRestartSingleSwitch(
 
     sai_object_id_t switchRid;
 
-    sai_attr_id_t notifs[] = {
-        SAI_SWITCH_ATTR_SWITCH_STATE_CHANGE_NOTIFY,
-        SAI_SWITCH_ATTR_SHUTDOWN_REQUEST_NOTIFY,
-        SAI_SWITCH_ATTR_FDB_EVENT_NOTIFY,
-        SAI_SWITCH_ATTR_NAT_EVENT_NOTIFY,
-        SAI_SWITCH_ATTR_PORT_STATE_CHANGE_NOTIFY,
-        SAI_SWITCH_ATTR_QUEUE_PFC_DEADLOCK_NOTIFY,
-        SAI_SWITCH_ATTR_BFD_SESSION_STATE_CHANGE_NOTIFY
-    };
-
     std::vector<sai_attribute_t> attrs;
 
     sai_attribute_t attr;
@@ -4412,12 +4402,6 @@ void Syncd::performWarmRestartSingleSwitch(
     attr.value.booldata = true;
 
     attrs.push_back(attr);
-
-    for (size_t idx = 0; idx < (sizeof(notifs) / sizeof(notifs[0])); idx++)
-    {
-        attr.id = notifs[idx];
-        attr.value.ptr = (void*)1; // any non-null pointer
-    }
 
     sai_attribute_t *attrList = list.get_attr_list();
 
