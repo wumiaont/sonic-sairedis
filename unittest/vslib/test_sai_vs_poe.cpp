@@ -6,7 +6,7 @@ extern "C" {
 
 #include "swss/logger.h"
 
-TEST(libsairedis, poe)
+TEST(libsaivs, poe)
 {
     sai_poe_api_t *api = nullptr;
 
