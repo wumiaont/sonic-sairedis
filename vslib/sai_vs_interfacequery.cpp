@@ -213,8 +213,7 @@ sai_status_t sai_query_api_version(
 {
     SWSS_LOG_ENTER();
 
-    *version = SAI_API_VERSION;
-    return SAI_STATUS_SUCCESS;
+    return vs_sai->queryApiVersion(version);
 }
 
 sai_status_t sai_bulk_object_get_stats(
