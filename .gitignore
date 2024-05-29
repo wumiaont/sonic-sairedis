@@ -59,6 +59,10 @@ stamp-h1
 python/build/
 python/setup.py
 
+lib/sai_redis.cpp
+vslib/sai_vs.cpp
+proxylib/sai_proxy.cpp
+
 # Test Files #
 ##############
 meta/test-suite.log
@@ -115,6 +119,8 @@ unittest/vslib/testslibsaivs
 unittest/proxylib/tests
 unittest/proxylib/testslibsaiproxy
 vslib/tests
+stub/tests
+unittest/stub/stub/testslibsaistub
 
 # Temporary files #
 ###################

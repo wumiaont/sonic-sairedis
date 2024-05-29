@@ -1,28 +1,16 @@
-#include "DummySaiInterface.h"
+#include "RedisRemoteSaiInterface.h"
+#include "ContextConfigContainer.h"
 
 #include <gtest/gtest.h>
 
-#include <memory>
+using namespace sairedis;
 
-using namespace saimeta;
-
-TEST(DummySaiInterface, queryApiVersion)
+TEST(RedisRemoteSaiInterface, bulkGet)
 {
-    DummySaiInterface sai;
+    auto ctx = ContextConfigContainer::loadFromFile("foo");
+    auto rec = std::make_shared<Recorder>();
 
-    sai.apiInitialize(0,0);
-
-    sai_api_version_t version;
-
-    EXPECT_EQ(sai.queryApiVersion(NULL), SAI_STATUS_SUCCESS);
-    EXPECT_EQ(sai.queryApiVersion(&version), SAI_STATUS_SUCCESS);
-}
-
-TEST(DummySaiInterface, bulkGet)
-{
-    DummySaiInterface sai;
-
-    sai.apiInitialize(0,0);
+    RedisRemoteSaiInterface sai(ctx->get(0), nullptr, rec);
 
     sai_object_id_t oids[1] = {0};
     uint32_t attrcount[1] = {0};
@@ -39,3 +27,4 @@ TEST(DummySaiInterface, bulkGet)
                 SAI_BULK_OP_ERROR_MODE_STOP_ON_ERROR,
                 statuses));
 }
+

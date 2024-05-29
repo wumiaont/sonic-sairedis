@@ -1,28 +1,14 @@
-#include "DummySaiInterface.h"
+#include "Sai.h"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 
-using namespace saimeta;
+using namespace saivs;
 
-TEST(DummySaiInterface, queryApiVersion)
+TEST(Sai, bulkGet)
 {
-    DummySaiInterface sai;
-
-    sai.apiInitialize(0,0);
-
-    sai_api_version_t version;
-
-    EXPECT_EQ(sai.queryApiVersion(NULL), SAI_STATUS_SUCCESS);
-    EXPECT_EQ(sai.queryApiVersion(&version), SAI_STATUS_SUCCESS);
-}
-
-TEST(DummySaiInterface, bulkGet)
-{
-    DummySaiInterface sai;
-
-    sai.apiInitialize(0,0);
+    Sai sai;
 
     sai_object_id_t oids[1] = {0};
     uint32_t attrcount[1] = {0};
@@ -39,3 +25,4 @@ TEST(DummySaiInterface, bulkGet)
                 SAI_BULK_OP_ERROR_MODE_STOP_ON_ERROR,
                 statuses));
 }
+
