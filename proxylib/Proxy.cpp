@@ -26,10 +26,14 @@ Proxy::Proxy(
 {
     SWSS_LOG_ENTER();
 
+    m_configFile = "config.ini"; //  TODO to command line
+
     // TODO to move hard coded addresses to config
 
     m_selectableChannel = std::make_shared<sairedis::ZeroMQSelectableChannel>("tcp://127.0.0.1:5555");
     m_notifications = std::make_shared<syncd::ZeroMQNotificationProducer>("tcp://127.0.0.1:5556");
+
+    loadProfileMap();
 
     m_smt.profileGetValue = std::bind(&Proxy::profileGetValue, this, _1, _2);
     m_smt.profileGetNextValue = std::bind(&Proxy::profileGetNextValue, this, _1, _2, _3);
@@ -55,6 +59,8 @@ Proxy::~Proxy()
 {
     SWSS_LOG_ENTER();
 
+    // TODO call stop()
+
     if (m_apiInitialized)
     {
         SWSS_LOG_NOTICE("calling api uninitialize");
@@ -71,6 +77,47 @@ Proxy::~Proxy()
     // until all possible notification thread will be sent
 
     m_notifications = nullptr;
+}
+
+void Proxy::loadProfileMap()
+{
+    SWSS_LOG_ENTER();
+
+    std::ifstream profile(m_configFile.c_str());
+
+    if (!profile.is_open())
+    {
+        SWSS_LOG_WARN("failed to open profile map file: %s: %s",
+                m_configFile.c_str(),
+                strerror(errno));
+
+        return;
+    }
+
+    std::string line;
+
+    while (getline(profile, line))
+    {
+        if (line.size() > 0 && (line[0] == '#' || line[0] == ';'))
+        {
+            continue;
+        }
+
+        size_t pos = line.find("=");
+
+        if (pos == std::string::npos)
+        {
+            SWSS_LOG_WARN("not found '=' in line %s", line.c_str());
+            continue;
+        }
+
+        std::string key = line.substr(0, pos);
+        std::string value = line.substr(pos + 1);
+
+        m_profileMap[key] = value;
+
+        SWSS_LOG_NOTICE("insert: %s:%s", key.c_str(), value.c_str());
+    }
 }
 
 const char* Proxy::profileGetValue(

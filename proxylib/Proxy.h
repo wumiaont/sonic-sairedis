@@ -98,6 +98,11 @@ namespace saiproxy
 
             void processClearStats(
                     _In_ const swss::KeyOpFieldsValuesTuple &kco);
+
+        private:
+
+            void loadProfileMap();
+
         private:
 
             syncd::ServiceMethodTable m_smt;
@@ -115,6 +120,8 @@ namespace saiproxy
             std::shared_ptr<sairedis::SelectableChannel> m_selectableChannel;
 
             std::shared_ptr<syncd::NotificationProducerBase> m_notifications;
+
+            std::string m_configFile;
 
             /**
              * @brief Mutex for synchronizing api execution and notifications
