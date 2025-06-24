@@ -6341,4 +6341,113 @@ void sai_deserialize_stats_st_capability_list(
         stat_modes_position++;
         stat_polling_interval_position++;
     }
+std::string sai_serialize_switch_macsec_post_status(
+    _In_ sai_object_id_t &switch_id,
+    _In_ const sai_switch_macsec_post_status_t &switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao sai_serialize_switch_macsec_post_status switch_id %s %d", sai_serialize_object_id(switch_id).c_str(), switch_macsec_post_status);
+
+    json j;
+
+    j["switch_id"] = sai_serialize_object_id(switch_id);
+    j["switch_macsec_post_status"] = sai_serialize_enum(switch_macsec_post_status, &sai_metadata_enum_sai_switch_macsec_post_status_t);
+
+    return j.dump();
+}
+
+std::string sai_serialize_switch_ipsec_post_status(
+    _In_ sai_object_id_t &switch_id,
+    _In_ const sai_switch_ipsec_post_status_t &switch_ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j;
+
+    j["switch_id"] = sai_serialize_object_id(switch_id);
+    j["switch_ipsec_post_status"] = sai_serialize_enum(switch_ipsec_post_status, &sai_metadata_enum_sai_switch_ipsec_post_status_t);
+
+    return j.dump();
+}
+
+std::string sai_serialize_macsec_post_status(
+    _In_ sai_object_id_t &switch_id,
+    _In_ const sai_macsec_post_status_t &macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j;
+
+    j["macsec_id"] = sai_serialize_object_id(switch_id);
+    j["macsec_post_status"] = sai_serialize_enum(macsec_post_status, &sai_metadata_enum_sai_macsec_post_status_t);
+
+    return j.dump();
+}
+
+std::string sai_serialize_ipsec_post_status(
+    _In_ sai_object_id_t &switch_id,
+    _In_ const sai_ipsec_post_status_t &ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j;
+
+    j["ipsec_id"] = sai_serialize_object_id(switch_id);
+    j["ipsec_post_status"] = sai_serialize_enum(ipsec_post_status, &sai_metadata_enum_sai_ipsec_post_status_t);
+
+    return j.dump();
+}
+
+void sai_deserialize_switch_macsec_post_status_ntf(
+    _In_ const std::string& s,
+    _Out_ sai_object_id_t &switch_id,
+    _Out_ sai_switch_macsec_post_status_t &switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao sai_deserialize_switch_macsec_post_status_ntf %s ", s.c_str());
+
+    json j = json::parse(s);
+
+    sai_deserialize_object_id(j["switch_id"], switch_id);
+    sai_deserialize_enum(j["switch_macsec_post_status"], &sai_metadata_enum_sai_switch_macsec_post_status_t, (int32_t&)switch_macsec_post_status);
+    SWSS_LOG_WARN("wumiao sai_deserialize_switch_macsec_post_status_ntf end %s ", sai_serialize_object_id(switch_id).c_str());
+}
+
+void sai_deserialize_switch_ipsec_post_status_ntf(
+    _In_ const std::string& s,
+    _Out_ sai_object_id_t &switch_id,
+    _Out_ sai_switch_ipsec_post_status_t &switch_ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j = json::parse(s);
+
+    sai_deserialize_object_id(j["switch_id"], switch_id);
+    sai_deserialize_enum(j["switch_ipsec_post_status"], &sai_metadata_enum_sai_switch_ipsec_post_status_t, (int32_t&)switch_ipsec_post_status);
+}
+
+void sai_deserialize_macsec_post_status_ntf(
+    _In_ const std::string& s,
+    _Out_ sai_object_id_t &macsec_id,
+    _Out_ sai_macsec_post_status_t &macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j = json::parse(s);
+
+    sai_deserialize_object_id(j["macsec_id"], macsec_id);
+    sai_deserialize_enum(j["macsec_post_status"], &sai_metadata_enum_sai_macsec_post_status_t, (int32_t&)macsec_post_status);
+}
+
+void sai_deserialize_ipsec_post_status_ntf(
+    _In_ const std::string& s,
+    _Out_ sai_object_id_t &ipsec_id,
+    _Out_ sai_ipsec_post_status_t &ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    json j = json::parse(s);
+
+    sai_deserialize_object_id(j["ipsec_id"], ipsec_id);
+    sai_deserialize_enum(j["ipsec_post_status"], &sai_metadata_enum_sai_ipsec_post_status_t, (int32_t&)ipsec_post_status);
 }

@@ -35,6 +35,10 @@ libsaimeta_la_SOURCES = \
 				NotificationSwitchAsicSdkHealthEvent.cpp \
 				NotificationSwitchShutdownRequest.cpp \
 				NotificationSwitchStateChange.cpp \
+				NotificationSwitchMacsecPostStatus.cpp\
+				NotificationSwitchIpsecPostStatus.cpp\
+				NotificationMacsecPostStatus.cpp\
+				NotificationIpsecPostStatus.cpp\
 				NotificationBfdSessionStateChange.cpp \
 				NotificationIcmpEchoSessionStateChange.cpp \
 				NotificationHaSetEvent.cpp \

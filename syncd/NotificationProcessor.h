@@ -124,6 +124,14 @@ namespace syncd
                     _In_ uint32_t count,
                     _In_ sai_twamp_session_event_notification_data_t *data);
 
+            void process_on_switch_macsec_post_status(
+                    _In_ sai_object_id_t switch_rid,
+                    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status);
+
+            void process_on_macsec_post_status(
+                    _In_ sai_object_id_t switch_rid,
+                    _In_ sai_macsec_post_status_t macsec_post_status);
+
         private: // handlers
 
             void handle_switch_state_change(
@@ -166,6 +174,11 @@ namespace syncd
                     _In_ const std::string &data);
 
             void handle_tam_tel_type_config_change(
+                    _In_ const std::string &data);
+            void handle_switch_macsec_post_status(
+                    _In_ const std::string &data);
+
+            void handle_macsec_post_status(
                     _In_ const std::string &data);
 
             void processNotification(

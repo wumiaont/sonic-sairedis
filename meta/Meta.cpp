@@ -6731,6 +6731,146 @@ void Meta::meta_sai_on_switch_asic_sdk_health_event(
     // we should not snoop switch_id, since switch id should be created directly by user
 }
 
+void Meta::meta_sai_on_switch_macsec_post_status(
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_ERROR("wumiao meta_sai_on_switch_macsec_post_status");
+    if (!sai_metadata_get_enum_value_name(
+                &sai_metadata_enum_sai_switch_macsec_post_status_t,
+                switch_macsec_post_status))
+    {
+        SWSS_LOG_WARN("switch macsec post status (%d) not found in sai_switch_macsec_post_status_t",
+            switch_macsec_post_status);
+    }
+
+    auto ot = objectTypeQuery(switch_id);
+
+    if (ot != SAI_OBJECT_TYPE_SWITCH)
+    {
+        SWSS_LOG_WARN("switch_id %s is of type %s, but expected SAI_OBJECT_TYPE_SWITCH",
+                sai_serialize_object_id(switch_id).c_str(),
+                sai_serialize_object_type(ot).c_str());
+
+        return;
+    }
+
+    sai_object_meta_key_t switch_meta_key = { .objecttype = ot , .objectkey = { .key = { .object_id = switch_id } } };
+
+    if (!m_saiObjectCollection.objectExists(switch_meta_key))
+    {
+        SWSS_LOG_ERROR("switch_id %s don't exists in local database",
+                sai_serialize_object_id(switch_id).c_str());
+    }
+
+    // we should not snoop switch_id, since switch id should be created directly by user
+}
+
+void Meta::meta_sai_on_switch_ipsec_post_status(
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    if (!sai_metadata_get_enum_value_name(
+                &sai_metadata_enum_sai_switch_ipsec_post_status_t,
+                switch_ipsec_post_status))
+    {
+        SWSS_LOG_WARN("switch ipsec post status (%d) not found in sai_switch_ipsec_post_status_t",
+            switch_ipsec_post_status);
+    }
+
+    auto ot = objectTypeQuery(switch_id);
+
+    if (ot != SAI_OBJECT_TYPE_SWITCH)
+    {
+        SWSS_LOG_WARN("switch_id %s is of type %s, but expected SAI_OBJECT_TYPE_SWITCH",
+                sai_serialize_object_id(switch_id).c_str(),
+                sai_serialize_object_type(ot).c_str());
+
+        return;
+    }
+
+    sai_object_meta_key_t switch_meta_key = { .objecttype = ot , .objectkey = { .key = { .object_id = switch_id } } };
+
+    if (!m_saiObjectCollection.objectExists(switch_meta_key))
+    {
+        SWSS_LOG_ERROR("switch_id %s don't exists in local database",
+                sai_serialize_object_id(switch_id).c_str());
+    }
+
+    // we should not snoop switch_id, since switch id should be created directly by user
+}
+
+void Meta::meta_sai_on_macsec_post_status(
+    _In_ sai_object_id_t macsec_id,
+    _In_ sai_macsec_post_status_t macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    if (!sai_metadata_get_enum_value_name(
+                &sai_metadata_enum_sai_macsec_post_status_t,
+                macsec_post_status))
+    {
+        SWSS_LOG_WARN("macsec post status (%d) not found in sai_macsec_post_status_t",
+            macsec_post_status);
+    }
+
+    auto ot = objectTypeQuery(macsec_id);
+
+    if (ot != SAI_OBJECT_TYPE_MACSEC)
+    {
+        SWSS_LOG_WARN("macsec_id %s is of type %s, but expected SAI_OBJECT_TYPE_MACSEC",
+                sai_serialize_object_id(macsec_id).c_str(),
+                sai_serialize_object_type(ot).c_str());
+
+        return;
+    }
+
+    sai_object_meta_key_t macsec_meta_key = { .objecttype = ot , .objectkey = { .key = { .object_id = macsec_id } } };
+
+    if (!m_saiObjectCollection.objectExists(macsec_meta_key))
+    {
+        m_saiObjectCollection.createObject(macsec_meta_key);
+    }
+
+}
+
+void Meta::meta_sai_on_ipsec_post_status(
+    _In_ sai_object_id_t ipsec_id,
+    _In_ sai_ipsec_post_status_t ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    if (!sai_metadata_get_enum_value_name(
+                &sai_metadata_enum_sai_ipsec_post_status_t,
+                ipsec_post_status))
+    {
+        SWSS_LOG_WARN("ipsec post status (%d) not found in sai_ipsec_post_status_t",
+            ipsec_post_status);
+    }
+
+    auto ot = objectTypeQuery(ipsec_id);
+
+    if (ot != SAI_OBJECT_TYPE_IPSEC)
+    {
+        SWSS_LOG_WARN("ipsec_id %s is of type %s, but expected SAI_OBJECT_TYPE_IPSEC",
+                sai_serialize_object_id(ipsec_id).c_str(),
+                sai_serialize_object_type(ot).c_str());
+
+        return;
+    }
+
+    sai_object_meta_key_t ipsec_meta_key = { .objecttype = ot , .objectkey = { .key = { .object_id = ipsec_id } } };
+
+    if (!m_saiObjectCollection.objectExists(ipsec_meta_key))
+    {
+        m_saiObjectCollection.createObject(ipsec_meta_key);
+    }
+
+}
+
 void Meta::meta_sai_on_switch_shutdown_request(
         _In_ sai_object_id_t switch_id)
 {

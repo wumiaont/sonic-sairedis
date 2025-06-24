@@ -269,6 +269,21 @@ namespace saimeta
             void meta_sai_on_tam_tel_type_config_change(_In_ sai_object_id_t m_tam_id);
 
     private: // notifications helpers
+            void meta_sai_on_switch_macsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_switch_macsec_post_status_t switch_macsec_post_status);
+
+            void meta_sai_on_switch_ipsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status);
+
+            void meta_sai_on_macsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_macsec_post_status_t macsec_post_status);
+
+            void meta_sai_on_ipsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_ipsec_post_status_t ipsec_post_status);
 
             void meta_sai_on_fdb_flush_event_consolidated(
                     _In_ const sai_fdb_event_notification_data_t& data);

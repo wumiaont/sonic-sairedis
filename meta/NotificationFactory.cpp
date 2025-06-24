@@ -4,6 +4,10 @@
 #include "NotificationPortStateChange.h"
 #include "NotificationQueuePfcDeadlock.h"
 #include "NotificationSwitchShutdownRequest.h"
+#include "NotificationSwitchMacsecPostStatus.h"
+#include "NotificationSwitchIpsecPostStatus.h"
+#include "NotificationMacsecPostStatus.h"
+#include "NotificationIpsecPostStatus.h"
 #include "NotificationSwitchStateChange.h"
 #include "NotificationSwitchAsicSdkHealthEvent.h"
 #include "NotificationBfdSessionStateChange.h"
@@ -66,6 +70,17 @@ std::shared_ptr<Notification> NotificationFactory::deserialize(
 
     if (name == SAI_SWITCH_NOTIFICATION_NAME_TAM_TEL_TYPE_CONFIG_CHANGE)
         return std::make_shared<NotificationTamTelTypeConfigChange>(serializedNotification);
+    if (name == SAI_SWITCH_NOTIFICATION_NAME_MACSEC_POST_STATUS)
+        return std::make_shared<NotificationMacsecPostStatus>(serializedNotification);
+    
+    if (name == SAI_SWITCH_NOTIFICATION_NAME_SWITCH_MACSEC_POST_STATUS)
+        return std::make_shared<NotificationSwitchMacsecPostStatus>(serializedNotification);
+    
+    if (name == SAI_SWITCH_NOTIFICATION_NAME_IPSEC_POST_STATUS)
+        return std::make_shared<NotificationIpsecPostStatus>(serializedNotification);
+    
+    if (name == SAI_SWITCH_NOTIFICATION_NAME_SWITCH_IPSEC_POST_STATUS)
+        return std::make_shared<NotificationSwitchIpsecPostStatus>(serializedNotification);
 
     SWSS_LOG_THROW("unknown notification: '%s', FIXME", name.c_str());
 }
