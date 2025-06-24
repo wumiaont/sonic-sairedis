@@ -43,7 +43,7 @@ void NotificationProcessor::sendNotification(
 {
     SWSS_LOG_ENTER();
 
-    SWSS_LOG_INFO("%s %s", op.c_str(), data.c_str());
+    SWSS_LOG_WARN("wumiao %s %s", op.c_str(), data.c_str());
 
     m_notifications->send(op, data, entry);
 
@@ -66,7 +66,6 @@ void NotificationProcessor::process_on_switch_state_change(
         _In_ sai_switch_oper_status_t switch_oper_status)
 {
     SWSS_LOG_ENTER();
-
     sai_object_id_t switch_vid = m_translator->translateRidToVid(switch_rid, SAI_NULL_OBJECT_ID);
 
     auto s = sai_serialize_switch_oper_status(switch_vid, switch_oper_status);
@@ -309,7 +308,7 @@ void NotificationProcessor::process_on_fdb_event(
 {
     SWSS_LOG_ENTER();
 
-    SWSS_LOG_INFO("fdb event count: %u", count);
+    SWSS_LOG_WARN("wumiao fdb event count: %u", count);
 
     bool sendntf = true;
 
@@ -399,7 +398,7 @@ void NotificationProcessor::process_on_nat_event(
 {
     SWSS_LOG_ENTER();
 
-    SWSS_LOG_INFO("nat event count: %u", count);
+    SWSS_LOG_WARN("wumiao nat event count: %u", count);
 
     bool sendntf = true;
 
@@ -491,8 +490,6 @@ void NotificationProcessor::process_on_port_state_change(
 {
     SWSS_LOG_ENTER();
 
-    SWSS_LOG_DEBUG("port notification count: %u", count);
-
     for (uint32_t i = 0; i < count; i++)
     {
         sai_port_oper_status_notification_t *oper_stat = &data[i];
@@ -507,7 +504,7 @@ void NotificationProcessor::process_on_port_state_change(
          * switch vid.
          */
 
-        SWSS_LOG_INFO("Port RID %s state change notification",
+        SWSS_LOG_ERROR("Port RID %s state change notification",
                 sai_serialize_object_id(rid).c_str());
 
         if (false == m_translator->tryTranslateRidToVid(rid, oper_stat->port_id))
@@ -520,7 +517,7 @@ void NotificationProcessor::process_on_port_state_change(
          * SAI_NULL_OBJECT_ID or non exist at time of processing
          */
 
-        SWSS_LOG_INFO("Port VID %s state change notification",
+        SWSS_LOG_NOTICE("Port VID %s state change notification",
                 sai_serialize_object_id(oper_stat->port_id).c_str());
     }
 
@@ -580,12 +577,37 @@ void NotificationProcessor::process_on_switch_shutdown_request(
         _In_ sai_object_id_t switch_rid)
 {
     SWSS_LOG_ENTER();
-
     sai_object_id_t switch_vid = m_translator->translateRidToVid(switch_rid, SAI_NULL_OBJECT_ID);
 
     std::string s = sai_serialize_switch_shutdown_request(switch_vid);
 
     sendNotification(SAI_SWITCH_NOTIFICATION_NAME_SWITCH_SHUTDOWN_REQUEST, s);
+}
+
+void NotificationProcessor::process_on_switch_macsec_post_status(
+    _In_ sai_object_id_t switch_rid,
+    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    
+    sai_object_id_t switch_vid = m_translator->translateRidToVid(switch_rid, SAI_NULL_OBJECT_ID);
+    SWSS_LOG_ERROR("wumiao NotificationProcessor::process_on_switch_macsec_post_status rid %s, vid %s", sai_serialize_object_id(switch_rid).c_str(), sai_serialize_object_id(switch_vid).c_str());
+    std::string s = sai_serialize_switch_macsec_post_status(switch_vid, switch_macsec_post_status);
+
+    sendNotification(SAI_SWITCH_NOTIFICATION_NAME_SWITCH_MACSEC_POST_STATUS, s);
+}
+
+void NotificationProcessor::process_on_macsec_post_status(
+    _In_ sai_object_id_t switch_rid,
+    _In_ sai_macsec_post_status_t macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    
+    sai_object_id_t switch_vid = m_translator->translateRidToVid(switch_rid, SAI_NULL_OBJECT_ID);
+    SWSS_LOG_ERROR("wumiao NotificationProcessor::process_on_macsec_post_status rid %s, vid %s", sai_serialize_object_id(switch_rid).c_str(), sai_serialize_object_id(switch_vid).c_str());
+    std::string s = sai_serialize_macsec_post_status(switch_vid, macsec_post_status);
+
+    sendNotification(SAI_SWITCH_NOTIFICATION_NAME_MACSEC_POST_STATUS, s);
 }
 
 void NotificationProcessor::process_on_twamp_session_event(
@@ -766,6 +788,35 @@ void NotificationProcessor::handle_switch_shutdown_request(
     process_on_switch_shutdown_request(switch_id);
 }
 
+void NotificationProcessor::handle_switch_macsec_post_status(
+    _In_ const std::string &data)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao handle_switch_macsec_post_status %s ", data.c_str());
+
+    sai_object_id_t switch_id;
+    sai_switch_macsec_post_status_t switch_macsec_post_status;
+
+    sai_deserialize_switch_macsec_post_status_ntf(data, switch_id, switch_macsec_post_status);
+    SWSS_LOG_WARN("wumiao process_on_switch_macsec_post_status %s ", data.c_str());
+    process_on_switch_macsec_post_status(switch_id, switch_macsec_post_status);
+}
+
+void NotificationProcessor::handle_macsec_post_status(
+    _In_ const std::string &data)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao handle_macsec_post_status %s ", data.c_str());
+
+    sai_object_id_t switch_id;
+    sai_macsec_post_status_t macsec_post_status;
+
+    sai_deserialize_macsec_post_status_ntf(data, switch_id, macsec_post_status);
+    SWSS_LOG_WARN("wumiao process_on_macsec_post_status %s ", data.c_str());
+    process_on_macsec_post_status(switch_id, macsec_post_status);
+}
+
+
 void NotificationProcessor::handle_twamp_session_event(
         _In_ const std::string &data)
 {
@@ -836,6 +887,14 @@ void NotificationProcessor::syncProcessNotification(
     else if (notification == SAI_SWITCH_NOTIFICATION_NAME_TWAMP_SESSION_EVENT)
     {
         handle_twamp_session_event(data);
+    }
+    else if (notification == SAI_SWITCH_NOTIFICATION_NAME_SWITCH_MACSEC_POST_STATUS)
+    {
+        handle_switch_macsec_post_status(data);
+    }
+    else if (notification == SAI_SWITCH_NOTIFICATION_NAME_MACSEC_POST_STATUS)
+    {
+        handle_macsec_post_status(data);
     }
     else
     {

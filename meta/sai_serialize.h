@@ -622,3 +622,41 @@ void sai_deserialize_redis_link_event_damping_algorithm(
 void sai_deserialize_redis_link_event_damping_aied_config(
         _In_ const std::string& s,
          _Out_ sai_redis_link_event_damping_algo_aied_config_t& value);
+
+// FIPS
+
+std::string sai_serialize_switch_macsec_post_status(
+        _In_ sai_object_id_t &switch_id,
+        _In_ const sai_switch_macsec_post_status_t &switch_macsec_post_status);
+
+std::string sai_serialize_switch_ipsec_post_status(
+        _In_ sai_object_id_t &switch_id,
+        _In_ const sai_switch_ipsec_post_status_t &switch_ipsec_post_status);
+
+std::string sai_serialize_macsec_post_status(
+        _In_ sai_object_id_t &switch_id,
+        _In_ const sai_macsec_post_status_t &macsec_post_status);
+
+std::string sai_serialize_ipsec_post_status(
+        _In_ sai_object_id_t &switch_id,
+        _In_ const sai_ipsec_post_status_t &ipsec_post_status);
+
+void sai_deserialize_switch_macsec_post_status_ntf(
+        _In_ const std::string& s,
+        _Out_ sai_object_id_t &switch_id,
+        _Out_ sai_switch_macsec_post_status_t &switch_macsec_post_status);
+
+void sai_deserialize_switch_ipsec_post_status_ntf(
+        _In_ const std::string& s,
+        _Out_ sai_object_id_t &switch_id,
+        _Out_ sai_switch_ipsec_post_status_t &switch_ipsec_post_status);
+
+void sai_deserialize_macsec_post_status_ntf(
+        _In_ const std::string& s,
+        _Out_ sai_object_id_t &macsec_id,
+        _Out_ sai_macsec_post_status_t &macsec_post_status);
+
+void sai_deserialize_ipsec_post_status_ntf(
+        _In_ const std::string& s,
+        _Out_ sai_object_id_t &ipsec_id,
+        _Out_ sai_ipsec_post_status_t &ipsec_post_status);

@@ -90,7 +90,27 @@ namespace syncd
                             _In_ uint32_t count,
                             _In_ const sai_twamp_session_event_notification_data_t *data);
 
-                protected:
+                    static void onSwitchMacsecPostStatus(
+                            _In_ int context,
+                            _In_ sai_object_id_t switch_id,
+                            _In_ sai_switch_macsec_post_status_t switch_macsec_post_status);
+
+                    static void onSwitchIpsecPostStatus(
+                            _In_ int context,
+                            _In_ sai_object_id_t switch_id,
+                            _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status);
+
+                    static void onMacsecPostStatus(
+                            _In_ int context,
+                            _In_ sai_object_id_t macsec_id,
+                            _In_ sai_macsec_post_status_t macsec_post_status);
+
+                    static void onIpsecPostStatus(
+                            _In_ int context,
+                            _In_ sai_object_id_t ipsec_id,
+                            _In_ sai_ipsec_post_status_t ipsec_post_status);
+
+            protected:
 
                     SwitchNotifications* m_handler;
 
@@ -118,6 +138,10 @@ namespace syncd
                             .on_switch_asic_sdk_health_event = &Slot<context>::onSwitchAsicSdkHealthEvent,
                             .on_port_host_tx_ready = &Slot<context>::onPortHostTxReady,
                             .on_twamp_session_event = &Slot<context>::onTwampSessionEvent,
+                            .on_macsec_post_status = &Slot<context>::onMacsecPostStatus,
+                            .on_ipsec_post_status = &Slot<context>::onIpsecPostStatus,
+                            .on_switch_macsec_post_status = &Slot<context>::onSwitchMacsecPostStatus,
+                            .on_switch_ipsec_post_status = &Slot<context>::onSwitchIpsecPostStatus,
                             }) { }
 
                 virtual ~Slot() {}
@@ -147,7 +171,6 @@ namespace syncd
                         _In_ const sai_port_oper_status_notification_t *data)
                 {
                     SWSS_LOG_ENTER();
-
                     return SlotBase::onPortStateChange(context, count, data);
                 }
 
@@ -223,6 +246,43 @@ namespace syncd
 
                     return SlotBase::onTwampSessionEvent(context, count, data);
                 }
+
+                static void onMacsecPostStatus(
+                        _In_ sai_object_id_t macsec_id,
+                        _In_ sai_macsec_post_status_t macsec_post_status)
+                {
+                    SWSS_LOG_ENTER();
+                    SWSS_LOG_WARN("wumiao Slot::onMacsecPostStatus");
+                    return SlotBase::onMacsecPostStatus(context, macsec_id, macsec_post_status);
+                }
+
+                static void onIpsecPostStatus(
+                        _In_ sai_object_id_t ipsec_id,
+                        _In_ sai_ipsec_post_status_t ipsec_post_status)
+                {
+                    SWSS_LOG_ENTER();
+
+                    return SlotBase::onIpsecPostStatus(context, ipsec_id, ipsec_post_status);
+                }
+
+                static void onSwitchMacsecPostStatus(
+                        _In_ sai_object_id_t switch_id,
+                        _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
+                {
+                    SWSS_LOG_ENTER();
+                    SWSS_LOG_WARN("wumiao Slot::onSwitchMacsecPostStatus");
+                    return SlotBase::onSwitchMacsecPostStatus(context, switch_id, switch_macsec_post_status);
+                }
+
+                static void onSwitchIpsecPostStatus(
+                        _In_ sai_object_id_t switch_id,
+                        _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status)
+                {
+                    SWSS_LOG_ENTER();
+
+                    return SlotBase::onSwitchIpsecPostStatus(context, switch_id, switch_ipsec_post_status);
+                }
+
         };
 
             static std::vector<SwitchNotifications::SlotBase*> m_slots;
@@ -254,8 +314,12 @@ namespace syncd
             std::function<void(sai_object_id_t switch_id, sai_switch_oper_status_t)>                onSwitchStateChange;
             std::function<void(uint32_t, const sai_bfd_session_state_notification_t*)>              onBfdSessionStateChange;
             std::function<void(uint32_t, const sai_twamp_session_event_notification_data_t*)>       onTwampSessionEvent;
+            std::function<void(sai_object_id_t, sai_macsec_post_status_t)>                          onMacsecPostStatus;
+            std::function<void(sai_object_id_t, sai_ipsec_post_status_t)>                           onIpsecPostStatus;
+            std::function<void(sai_object_id_t, sai_switch_macsec_post_status_t)>                   onSwitchMacsecPostStatus;
+            std::function<void(sai_object_id_t, sai_switch_ipsec_post_status_t)>                    onSwitchIpsecPostStatus;
 
-        private:
+    private:
 
             SlotBase*m_slot;
     };

@@ -237,6 +237,22 @@ namespace saimeta
                     _In_ uint32_t count,
                     _In_ const sai_twamp_session_event_notification_data_t *data);
 
+            void meta_sai_on_switch_macsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_switch_macsec_post_status_t switch_macsec_post_status);
+
+            void meta_sai_on_switch_ipsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status);
+
+            void meta_sai_on_macsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_macsec_post_status_t macsec_post_status);
+
+            void meta_sai_on_ipsec_post_status(
+                _In_ sai_object_id_t switch_id,
+                _In_ sai_ipsec_post_status_t ipsec_post_status);
+
         private: // notifications helpers
 
             void meta_sai_on_fdb_flush_event_consolidated(

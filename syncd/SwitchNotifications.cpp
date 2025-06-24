@@ -64,7 +64,6 @@ void SwitchNotifications::SlotBase::onPortStateChange(
         _In_ const sai_port_oper_status_notification_t *data)
 {
     SWSS_LOG_ENTER();
-
     return m_slots.at(context)->m_handler->onPortStateChange(count, data);
 }
 
@@ -139,6 +138,47 @@ void SwitchNotifications::SlotBase::onTwampSessionEvent(
     SWSS_LOG_ENTER();
 
     return m_slots.at(context)->m_handler->onTwampSessionEvent(count, data);
+}
+
+void SwitchNotifications::SlotBase::onMacsecPostStatus(
+        _In_ int context,
+        _In_ sai_object_id_t macsec_id,
+        _In_ sai_macsec_post_status_t macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao SlotBase::onMacsecPostStatus");
+    return m_slots.at(context)->m_handler->onMacsecPostStatus(macsec_id, macsec_post_status);
+}
+
+void SwitchNotifications::SlotBase::onSwitchMacsecPostStatus(
+    _In_ int context,
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao SlotBase::onSwitchMacsecPostStatus");
+
+    return m_slots.at(context)->m_handler->onSwitchMacsecPostStatus(switch_id, switch_macsec_post_status);
+}
+
+void SwitchNotifications::SlotBase::onIpsecPostStatus(
+    _In_ int context,
+    _In_ sai_object_id_t ipsec_id,
+    _In_ sai_ipsec_post_status_t ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    return m_slots.at(context)->m_handler->onIpsecPostStatus(ipsec_id, ipsec_post_status);
+}
+
+void SwitchNotifications::SlotBase::onSwitchIpsecPostStatus(
+    _In_ int context,
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    return m_slots.at(context)->m_handler->onSwitchIpsecPostStatus(switch_id, switch_ipsec_post_status);
 }
 
 const sai_switch_notifications_t& SwitchNotifications::SlotBase::getSwitchNotifications() const

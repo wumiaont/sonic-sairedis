@@ -80,7 +80,22 @@ namespace syncd
             void onTwampSessionEvent(
                     _In_ uint32_t count,
                     _In_ const sai_twamp_session_event_notification_data_t *data);
+            void onMacsecPostStatus(
+                    _In_ sai_object_id_t macsec_id,
+                    _In_ sai_macsec_post_status_t macsec_post_status);
+    
+            void onIpsecPostStatus(
+                    _In_ sai_object_id_t ipsec_id,
+                    _In_ sai_ipsec_post_status_t ipsec_post_status);
+        
+            void onSwitchMacsecPostStatus(
+                    _In_ sai_object_id_t macsec_id,
+                    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status);
 
+            void onSwitchIpsecPostStatus(
+                    _In_ sai_object_id_t ipsec_id,
+                    _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status);
+    
         private:
 
             void enqueueNotification(

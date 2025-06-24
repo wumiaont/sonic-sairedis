@@ -128,6 +128,22 @@ void NotificationHandler::updateNotificationsPointers(
                 attr.value.ptr = (void*)m_switchNotifications.on_twamp_session_event;
                 break;
 
+            case SAI_SWITCH_ATTR_SWITCH_MACSEC_POST_STATUS_NOTIFY:
+                attr.value.ptr = (void*)m_switchNotifications.on_switch_macsec_post_status;
+                break;
+
+            case SAI_SWITCH_ATTR_SWITCH_IPSEC_POST_STATUS_NOTIFY:
+                attr.value.ptr = (void*)m_switchNotifications.on_switch_ipsec_post_status;
+                break;
+
+            case SAI_SWITCH_ATTR_MACSEC_POST_STATUS_NOTIFY:
+                attr.value.ptr = (void*)m_switchNotifications.on_macsec_post_status;
+                break;
+
+            case SAI_SWITCH_ATTR_IPSEC_POST_STATUS_NOTIFY:
+                attr.value.ptr = (void*)m_switchNotifications.on_ipsec_post_status;
+                break;
+
             default:
 
                 SWSS_LOG_ERROR("pointer for %s is not handled, FIXME!", meta->attridname);
@@ -274,6 +290,50 @@ void NotificationHandler::onTwampSessionEvent(
     enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_TWAMP_SESSION_EVENT, s);
 }
 
+void NotificationHandler::onMacsecPostStatus(
+    _In_ sai_object_id_t macsec_id,
+    _In_ sai_macsec_post_status_t macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    auto s = sai_serialize_macsec_post_status(macsec_id, macsec_post_status);
+    SWSS_LOG_WARN("wumiao onMacsecPostStatus");
+    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_MACSEC_POST_STATUS, s);
+}
+
+void NotificationHandler::onSwitchMacsecPostStatus(
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_macsec_post_status_t switch_macsec_post_status)
+{
+    SWSS_LOG_ENTER();
+    SWSS_LOG_WARN("wumiao onSwitchMacsecPostStatus");
+    auto s = sai_serialize_switch_macsec_post_status(switch_id, switch_macsec_post_status);
+
+    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_SWITCH_MACSEC_POST_STATUS, s);
+}
+
+void NotificationHandler::onIpsecPostStatus(
+    _In_ sai_object_id_t ipsec_id,
+    _In_ sai_ipsec_post_status_t ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    auto s = sai_serialize_ipsec_post_status(ipsec_id, ipsec_post_status);
+
+    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_IPSEC_POST_STATUS, s);
+}
+
+void NotificationHandler::onSwitchIpsecPostStatus(
+    _In_ sai_object_id_t switch_id,
+    _In_ sai_switch_ipsec_post_status_t switch_ipsec_post_status)
+{
+    SWSS_LOG_ENTER();
+
+    auto s = sai_serialize_switch_ipsec_post_status(switch_id, switch_ipsec_post_status);
+
+    enqueueNotification(SAI_SWITCH_NOTIFICATION_NAME_SWITCH_IPSEC_POST_STATUS, s);
+}
+
 void NotificationHandler::enqueueNotification(
         _In_ const std::string& op,
         _In_ const std::string& data)
@@ -284,4 +344,3 @@ void NotificationHandler::enqueueNotification(
 
     enqueueNotification(op, data, entry);
 }
-

@@ -61,7 +61,6 @@ void NotificationPortStateChange::processMetadata(
         _In_ std::shared_ptr<saimeta::Meta> meta) const
 {
     SWSS_LOG_ENTER();
-
     meta->meta_sai_on_port_state_change(m_count, m_portOperaStatusNotificationData);
 }
 
@@ -69,7 +68,6 @@ void NotificationPortStateChange::executeCallback(
         _In_ const sai_switch_notifications_t& switchNotifications) const
 {
     SWSS_LOG_ENTER();
-
     if (switchNotifications.on_port_state_change)
     {
         switchNotifications.on_port_state_change(m_count, m_portOperaStatusNotificationData);

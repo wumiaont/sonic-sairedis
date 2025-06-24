@@ -133,6 +133,27 @@ void Switch::updateNotifications(
                     (sai_twamp_session_event_notification_fn)attr.value.ptr;
                 break;
 
+            case SAI_SWITCH_ATTR_SWITCH_MACSEC_POST_STATUS_NOTIFY:
+                m_switchNotifications.on_switch_macsec_post_status =
+                    (sai_switch_macsec_post_status_notification_fn)attr.value.ptr;
+                break;
+
+            case SAI_SWITCH_ATTR_SWITCH_IPSEC_POST_STATUS_NOTIFY:
+                m_switchNotifications.on_switch_ipsec_post_status =
+                    (sai_switch_ipsec_post_status_notification_fn)attr.value.ptr;
+                break;
+
+            case SAI_SWITCH_ATTR_MACSEC_POST_STATUS_NOTIFY:
+                m_switchNotifications.on_macsec_post_status =
+                    (sai_macsec_post_status_notification_fn)attr.value.ptr;
+                break;
+
+            case SAI_SWITCH_ATTR_IPSEC_POST_STATUS_NOTIFY:
+                m_switchNotifications.on_ipsec_post_status =
+                    (sai_ipsec_post_status_notification_fn)attr.value.ptr;
+                break;
+
+
             default:
                 SWSS_LOG_ERROR("pointer for %s is not handled, FIXME!", meta->attridname);
                 break;

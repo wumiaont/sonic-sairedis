@@ -161,6 +161,10 @@ Syncd::Syncd(
     m_sn.onBfdSessionStateChange = std::bind(&NotificationHandler::onBfdSessionStateChange, m_handler.get(), _1, _2);
     m_sn.onPortHostTxReady = std::bind(&NotificationHandler::onPortHostTxReady, m_handler.get(), _1, _2, _3);
     m_sn.onTwampSessionEvent = std::bind(&NotificationHandler::onTwampSessionEvent, m_handler.get(), _1, _2);
+    m_sn.onMacsecPostStatus = std::bind(&NotificationHandler::onMacsecPostStatus, m_handler.get(), _1, _2);
+    m_sn.onIpsecPostStatus = std::bind(&NotificationHandler::onIpsecPostStatus, m_handler.get(), _1, _2);
+    m_sn.onSwitchMacsecPostStatus = std::bind(&NotificationHandler::onSwitchMacsecPostStatus, m_handler.get(), _1, _2);
+    m_sn.onSwitchIpsecPostStatus = std::bind(&NotificationHandler::onSwitchIpsecPostStatus, m_handler.get(), _1, _2);
 
     m_handler->setSwitchNotifications(m_sn.getSwitchNotifications());
 
